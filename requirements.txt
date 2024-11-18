@@ -1,0 +1,7 @@
+sentencepiece
+gunicorn
+accelerate
+uvicorn[standard]==0.17.*
+Flask
+gradio
+requests

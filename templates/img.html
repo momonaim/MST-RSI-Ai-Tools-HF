@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Image</title>
+</head>
+<body>
+    <h1>Generate an Image from Text</h1>
+    <form method="POST" action="{{ url_for('home') }}">
+        <label for="prompt">Enter a prompt for the image:</label><br>
+        <textarea id="prompt" name="prompt" rows="4" cols="50" required>{{ request.form.get('prompt') }}</textarea><br><br>
+        <input type="submit" value="Generate Image">
+    </form>
+
+    {% if image_data %}
+        <h2>Generated Image:</h2>
+        <img src="data:image/png;base64,{{ image_data }}" alt="Generated Image" style="max-width: 100%; max-height: 500px;"/>
+    {% endif %}
+
+    <br><br>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>
