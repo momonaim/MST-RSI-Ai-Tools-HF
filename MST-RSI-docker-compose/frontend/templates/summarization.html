@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #result {
+            background-color: #f4f4f4;
+            padding: 10px;
+        }
+
+        #loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+        }
+
+        #loader:before {
+            content: "Loading...";
+            font-weight: bold;
+            color: #007BFF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Text Summarization</h1>
+    <label for="textInput">Enter text to summarize:</label>
+    <textarea id="textInput" placeholder="Type your text here..."></textarea>
+
+    <button onclick="summarizeText()">Summarize</button>
+
+    <h2>Summarized Text</h2>
+    <textarea id="result" aria-label="Summarized Text" readonly></textarea>
+
+    <div id="loader"></div>
+
+    <script>
+        function summarizeText() {
+            const inputText = document.getElementById("textInput").value;
+
+            if (inputText.trim() === "") {
+                alert("Please enter some text to summarize.");
+                return;
+            }
+
+            document.getElementById("loader").style.display = "block";
+            document.getElementById("result").value = "";  // Clear previous result
+
+            fetch("/summarize", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    text: inputText
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("loader").style.display = "none";
+
+                    if (data.summary) {
+                        document.getElementById("result").value = data.summary;
+                    } else {
+                        alert("Error: " + (data.error || "Something went wrong."));
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("loader").style.display = "none";
+                    console.error("Error summarizing text:", error);
+                    alert("Something went wrong. Please try again.");
+                });
+        }
+    </script>
+
+</body>
+
+</html>

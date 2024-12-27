@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Image Generation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+            overflow-y: auto;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 500px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Generate an Image from Text</h1>
+        <form method="POST" action="{{ url_for('image_generation') }}">
+            <label for="prompt">Enter a prompt for the image:</label><br>
+            <textarea id="prompt" name="prompt" rows="4" cols="50"
+                required>{{ request.form.get('prompt') }}</textarea><br><br>
+            <input type="submit" value="Generate Image">
+        </form>
+
+        {% if image_filename %}
+        <h2>Generated Image:</h2>
+        <img src="{{ url_for('serve_image', filename=image_filename) }}" alt="Generated Image">
+        {% endif %}
+    </div>
+</body>
+
+</html>
